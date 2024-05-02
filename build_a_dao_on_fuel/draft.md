@@ -1476,3 +1476,5 @@ These functions enhance the user experience by providing real-time data and func
 Congratulations on building your first Decentralized Autonomous Organization on the Fuel blockchain.
 You created your DAO contract using Sway, compiled it, and deployed it to the Fuel testnet using your developer wallet configured locally. You also generated an ABI instance to make contract calls on your front-end application.
 After this experience, it goes beyond saying the skills you have acquired to go on building more complex solutions on the Fuel blockchain.
+
+
