@@ -238,10 +238,10 @@ Copy and paste the code below as your `constructor` function.
   }
 ```
 
-Note: Later in the tutorial, you'll create the functions for emitting events and error handling in the other library contracts. For now, you can simply import them.
+Note: Later in the tutorial, you'll create the functions for emitting events and error handling in the other library contracts. For now, you can import them.
 
 ### Creating Proposals
-This DAO tracks user funding proposals that request a specific amount of tokens from the DAO treasury. To start the voting process, a proposal must be submitted to the DAO contract.
+This DAO tracks user funding proposals that request specific tokens from the DAO treasury. A proposal must be submitted to the DAO contract to start the voting process.
 
 The `create_proposal()` function is implemented by taking in 3 input `acceptance_percentage: u64`, `duration: u64`, and `proposal_transaction: Proposal`, then it checks if the duration is greater than zero `require(0 < duration, CreationError::DurationCannotBeZero);`. 
  And if the acceptance percentage is within the valid range (0-100) `require(0 < acceptance_percentage && acceptance_percentage <= 100, CreationError::InvalidAcceptancePercentage,);`.
@@ -289,7 +289,7 @@ Copy and paste the code below using your `create_proposal` function.
 
 The DAO also lets users deposit assets (tokens) into the contract. Users who want to contribute to a proposal or the Dao treasury can use this function to send assets to the contract. It takes an `amount: u64` input and allows users to deposit `assets` (tokens) into the DAO.
 
-The deposit function is marked as [payable](https://docs.fuel.network/docs/fuels-rs/cookbook/deposit-and-withdraw/), meaning it can receive tokens along with the function call. you can also transfer assets in sway using the [`transfer()` function](https://docs.fuel.network/docs/fuels-rs/cookbook/transfer-all-assets/#transfer-all-assets) passing in the receiving `address`, token id and intended `amount` to transfer.
+The deposit function is marked as [payable](https://docs.fuel.network/docs/fuels-rs/cookbook/deposit-and-withdraw/), meaning it can receive tokens along with the function call. You can also transfer assets in sway using the [`transfer()` function](https://docs.fuel.network/docs/fuels-rs/cookbook/transfer-all-assets/#transfer-all-assets) passing in the receiving `address`, token id and intended `amount` to transfer.
 
 This function first ensures that the contract is initialized `(State::Initialized)`, verifies that the correct asset is being sent `msg_asset_id()`, and requires that the deposited amount is greater than zero `require(0 < msg_amount(), UserError::AmountCannotBeZero);`. Upon successful validation, it updates the user's balance in the contract's storage, logs a `DepositEvent`, and records the deposited amount and the user's address.
 
@@ -360,7 +360,7 @@ Copy and paste the code below as your `withdraw` function.
 
 ### Voting for a Proposal
 
-The vote function enables users to vote on a specific proposal that has already been created within the DAO. Users can choose to either approve or reject the proposal by specifying their vote `approve: bool`, the ID of the proposal they are voting on `proposal_id: u64`, and the amount of their vote `vote_amount: u64`.
+The vote function enables users to vote on a specific proposal already created within the DAO. Users can choose to either approve or reject the proposal by specifying their vote `approve: bool`, the ID of the proposal they are voting on `proposal_id: u64`, and the amount of their vote `vote_amount: u64`.
 
 Then, the function creates a mutable variable with the `mut` keyword to store the intended proposal from the contract storage and checks if all requirements to keep the proposal active are met.
 
@@ -545,7 +545,7 @@ Copy and paste the code below as your `unlock_votes` function.
 ```
 
 ### 6. Creating the Info Contract
-On your `main.sw` file, you will create an `Info` contract that will serve as your `abi`. Each function provides information about the State of the DAO contract, including `balances`, `votes`, and `proposals`. It defines how external smart contracts can query the status and details of your DAO Contract.
+You will create an' Info' contract on your `main.sw` file to serve as your `abi`. Each function provides information about the State of the DAO contract, including `balances`, `votes`, and `proposals`. It defines how external smart contracts can query the status and details of your DAO Contract.
 
 Copy and paste the code below the `main.sw` file.
 
@@ -1425,18 +1425,18 @@ The Home component is the main page of the frontend application for interacting 
 
 - It Initializes several state variables using the `useState` hook to manage user-related data, contract abi, proposal data, tab navigation, etc.
 
-An effect hook is used to initialize the contract instance and fetch data when the component mounts or when the wallet connection status changes.
+An effect hook initialises the contract instance and fetches data when the component mounts or the wallet connection status changes.
 
 - Functions like `fetchProposals`, `createProposal`, `voteOnProposal`, and `getVoteAmount` are defined to interact with the DAO contract.
 ![create_proposal](./images/create_proposal.png)
 
 ## The ProposalCount Component
 
-The `ProposalCount` component contributes to the user experience by clearly indicating the current number of proposals within the DAO.
+The `ProposalCount` component contributes to the user experience by indicating the current number of proposals within the DAO.
 
 ![proposal_vote](./images/proposal_vote.png)
 
- - It imports modules from React and the `contracts-api`, along with the `fetchProposalCount` function from `contractUtils`.
+ - It imports modules from React, the `contracts-api`, and the `fetchProposalCount` function from `contractUtils`.
  The component initializes a state variable, `proposalCount,` to store the total number of proposals. This count is initially set to `null`.
  - A `handleFetchProposalCount` function is defined to fetch the total count of proposals asynchronously. It first ensures that the `wallet` prop is available, representing the user's wallet. Then, it creates an instance of the DAO contract using `ContractAbi__factory` and calls `fetchProposalCount` to retrieve the count. Upon success, it updates the `proposalCount` state with the fetched count.
  - The `useEffect` hook triggers the `handleFetchProposalCount` function when the component mounts or changes the `wallet` prop.
@@ -1476,5 +1476,3 @@ These functions enhance the user experience by providing real-time data and func
 Congratulations on building your first Decentralized Autonomous Organization on the Fuel blockchain.
 You created your DAO contract using Sway, compiled it, and deployed it to the Fuel testnet using your developer wallet configured locally. You also generated an ABI instance to make contract calls on your front-end application.
 After this experience, it goes beyond saying the skills you have acquired to go on building more complex solutions on the Fuel blockchain.
-
-
