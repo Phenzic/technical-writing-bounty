@@ -11,7 +11,7 @@ It is a decentralized application that users or organizations use to automate th
 By completing this article, you will learn how to create a DAO contract on the Fuel blockchain. You will also gain knowledge about the following concepts:
 
 1. Writing a smart contract using the sway language.
-2. Understanding how to use low level code fundamentals in sway asm, call etc.
+2. Understanding how to use low-level code fundamentals in sway `asm`, `call`, etc.
 3. Wallet configuration
 4. How to compile and deploy to the Fuel blockchain (testnet).
 
@@ -124,7 +124,7 @@ All of these are libraries you will be creating later in this tutorial.
 
 - `error`: define the error handlers for your contract.
 - `data_structure`: defines functionalities for managing proposals and voting and defines methods for initializing your DAO.
-- `events`: defines a library of multiple `structs` to **emit events** when certain instances or functions are executed on-chain.
+- `events` defines a library of multiple `structs` that emit events when certain instances or functions are executed on-chain.
 - `utils`: These will be instances emitted on-chain when certain events are met.
 - `interface`: this is where you will implement your contract ABIs
 
@@ -132,14 +132,14 @@ All of these are libraries you will be creating later in this tutorial.
 
 Next, you will initialize a set of persistent [storage](https://docs.fuel.network/docs/sway/blockchain-development/storage/#storage) needed throughout your contract.
 
-***Note: Storage initilization is one of the similar patterns in [solidity](https://docs.fuel.network/docs/intro/what-is-fuel/#rust--solidity--sway) that sway supports as well.***
+***Note: Storage initialization is one of the similar patterns in [solidity](https://docs.fuel.network/docs/intro/what-is-fuel/#rust--solidity--sway) that sway supports as well.***
 
 This contract initializes the storage with the keyword `storage{}` and has a list of the variables and their storage types. To read or write to the storage type respectfully, use the `storage` keyword and `.try_read()` or `.write()`.
 Follow the [guide](https://docs.fuel.network/docs/sway/common-collections/storage_map) to know more about managing storage maps and their types. 
 
 - `balances`: This variable stores an object mapping the user's identity (address) to the total amount of deposited tokens `64-unsigned int` they have your Dao contract.
 
-- `proposals`: This storage maps a `64-unsigned int` to a new proposal information `struct`, keeping track of every new proposal in your DAO that a user makes ont eh DAO contract.
+- `proposals`: This storage maps a `64-unsigned int` to a new proposal information `struct`, keeping track of every new proposal in your DAO that a user makes on the DAO contract.
 
 - `proposal_count`: This defines a simple `64 unsigned int` that tracks the total number of proposals created uniquely in your DAO.
 
@@ -147,7 +147,7 @@ Follow the [guide](https://docs.fuel.network/docs/sway/common-collections/storag
 
 - `asset`: This variable stores the contract ID of a governance asset. This asset i  regardd as the only acceptable asset used in the DAO contract, If a user try's to interact with the DAO using any other asset aside the one initialized with the contract, the event is rejected.
 
-- `votes`: This storage also keeps an object map of the user's `Identity` to their `vote` as `64-unsigned int` for an opened proposal on your DAO. So if a user votes on a proposal, their identity and vote is stored as a map here mapped.
+- `votes`: This storage also keeps an object map of the user's `Identity` to their `vote` as `64-unsigned int` for an opened proposal on your DAO. So, if a user votes on a proposal, their identity and vote are stored as a map here.
 Copy and add the code below to your `main.sw` contract.
 
 ```rust
@@ -173,7 +173,7 @@ storage {
 ```
 
 ### 4. Creating the DAO Contract
-For the entire use case of this tutoria, we'll consider a creating a DAO for a local community of builders (), The DAO wil be resposible for managing all funds and proposals for community projects. We'll call it **ComunityBuidDao**. This name is not neccesariliy encoded into the contract it is what we will call the community. 
+For the entire use case of this tutorial, we'll consider creating a DAO for a local community of builders (); the DAO will be responsible for managing all funds and proposals for community projects. We'll call it **ComunityBuidDao**. This name is not necessarily encoded into the contract. It is what we will call the community. 
 
 To define the functions in your Dao contract, copy and paste the code below. In the next few steps, you will create and understand each function in the DAO contract.
 
@@ -620,6 +620,7 @@ Copy and paste the code below the `main.sw` file.
 - `balance() -> u64`: This function retrieves the balance of governance coins held by the contract and returns the total `balance` as a `u64` integer.
 
 Copy and replace the `balance` function with the code below.
+
 ```rust
   #[storage(read)]
   fn balance() -> u64 {
