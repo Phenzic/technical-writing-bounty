@@ -8,12 +8,12 @@ A Decentralized Autonomous Organization (DAO) is considered an essential blockch
 
 It is a decentralized application that users or organizations use to automate the governance execution of their projects and communities. The automated program is represented by rules encoded in a network of computers that is transparently controlled by the organization members and not influenced by any central authority.
 
-By completing this article, you will learn how to build a Decentralized Application (Dapp) that integrates a DAO contract on the Fuel blockchain. You will also gain knowledge about the following concepts of Dapp development:
+By completing this article, you will learn how to create a DAO contract on the Fuel blockchain. You will also gain knowledge about the following concepts:
 
-1. Writing a DAO smart contract using the sway language.
-2. Wallet configuration
-3. Compiling and deploying to the Fuel blockchain (testnet).
-4. Creating your DAO front end, including contract calls from your deployed contract. 
+1. Writing a smart contract using the sway language.
+2. Understanding how to use low level code fundamentals in sway asm, call etc.
+3. Wallet configuration
+4. How to compile and deploy to the Fuel blockchain (testnet).
 
 ## Prerequisites
 
@@ -41,7 +41,7 @@ Before you delve into the main topic, here are some concepts to jug your memory 
 
 ## Setting up your Environment
 
-In the next few steps, you will set up your development environment to begin building your smart contract and the front end of your Dao.
+In the next few steps, you will set up your development environment to begin building the smart contract of your Dao.
 
 1. Go to your terminal and run the command `wsl` to start your wsl terminal if you are using a Windows
 
@@ -437,59 +437,69 @@ fn vote(approve: bool, proposal_id: u64, vote_amount: u64) {
 
 ### Executing a Proposal
 
-This function takes in a `proposal_id` and executes the proposal if it meets the following condition requirements,
+When a DAO members propose changes to the organization's operations, and these proposals are voted upon by the community. Once a proposal has garnered sufficient approval, it needs to be executed to enact its changes.
+
+Inside the execute function, the proposal's details are retrieved from storage. It checks that the proposal has not been executed already, has passed its deadline, and meets the required acceptance percentage. Once verified, the proposal's executed flag is set to true to mark it as completed.
+
+The function takes in a `proposal_id` and executes the proposal if it meets the following condition requirements,
 - It validates the `validate_id(proposal_id, storage.proposal_count.read())`, 
 
-- checks if the proposal has not been executed `let mut proposal = storage.proposals.get(proposal_id).try_read().unwrap(); require(!proposal.executed)` and has expired `require(proposal.deadline < height().as_u64(),`, 
+- It then checks if the proposal has not been executed `let mut proposal = storage.proposals.get(proposal_id).try_read().unwrap(); require(!proposal.executed)` and has expired `require(proposal.deadline < height().as_u64(),`, 
 
-- Then, it verifies if the acceptance percentage condition is met `let acceptance_percentage = proposal.yes_votes * 100 / (proposal.yes_votes + proposal.no_votes); require(proposal.acceptance_percentage<=acceptance_percentage),`. 
+- If the acceptance percentage condition is met `let acceptance_percentage = proposal.yes_votes * 100 / (proposal.yes_votes + proposal.no_votes); require(proposal.acceptance_percentage<=acceptance_percentage),`. 
 
-If all the conditions are met, it executes the proposal's transaction and emits and logs the `ExecuteEvent` event.
+- If all the conditions are met, it executes the proposal's transaction and emits and logs the `ExecuteEvent` event.
 
 Copy and paste the code below as your `execute()` function.
 
 ```rust
-  #[storage(read, write)]
-  fn execute(proposal_id: u64) {
-    validate_id(proposal_id, storage.proposal_count.read());
+#[storage(read, write)]
+fn execute(proposal_id: u64) {
+    // Validate the proposal ID against the current proposal count
+    validate_id(proposal_id, storage.proposal_count.read());
 
-    let mut proposal = storage.proposals.get(proposal_id).try_read().unwrap();
-    require(!proposal.executed, ProposalError::ProposalExecuted);
-    require(
-      proposal
-        .deadline < height()
-        .as_u64(),
-      ProposalError::ProposalStillActive,
-    );
+    // Retrieve the proposal from storage and ensure it has not been executed and has passed its deadline
+    let mut proposal = storage.proposals.get(proposal_id).try_read().unwrap();
+    require(!proposal.executed, ProposalError::ProposalExecuted);
+    require(
+        proposal.deadline < height().as_u64(),
+        ProposalError::ProposalStillActive,
+    );
 
-    let acceptance_percentage = proposal.yes_votes * 100 / (proposal.yes_votes + proposal.no_votes);
-    require(
-      proposal
-        .acceptance_percentage <= acceptance_percentage,
-      ProposalError::InsufficientApprovals,
-    );
+    // Calculate the acceptance percentage of the proposal based on yes and no votes
+    let acceptance_percentage = proposal.yes_votes * 100 / (proposal.yes_votes + proposal.no_votes);
+    
+    // Ensure that the acceptance percentage meets the required threshold for execution
+    require(
+        proposal.acceptance_percentage <= acceptance_percentage,
+        ProposalError::InsufficientApprovals,
+    );
 
-    proposal.executed = true;
-    storage.proposals.insert(proposal_id, proposal);
+    // Mark the proposal as executed
+    proposal.executed = true;
+    storage.proposals.insert(proposal_id, proposal);
 
-    asm(
-      call_data: proposal.proposal_transaction.call_data,
-      amount: proposal.proposal_transaction.amount,
-      asset: proposal.proposal_transaction.asset,
-      gas: proposal.proposal_transaction.gas,
-    ) {
-      call call_data amount asset gas;
-    }
+    // Execute the proposal transaction using assembly code
+    asm(
+        call_data: proposal.proposal_transaction.call_data,
+        amount: proposal.proposal_transaction.amount,
+        asset: proposal.proposal_transaction.asset,
+        gas: proposal.proposal_transaction.gas,
+    ) {
+        call call_data amount asset gas;
+    }
 
-    log(ExecuteEvent {
-      user: msg_sender().unwrap(),
-      acceptance_percentage,
-      id: proposal_id,
-    })
-  }
+    // Log an event indicating that the proposal has been executed
+    log(ExecuteEvent {
+        user: msg_sender().unwrap(),
+        acceptance_percentage,
+        id: proposal_id,
+    })
+}
+
 ```
 
-***Note:In sway, the [assembly block](https://docs.fuel.network/docs/sway/advanced/assembly/#asm-block) `asm` used to create an assemly inline, declaring an asm block is similar to declaring a function but in low-level code, in this function the block executes the proposal's transaction. It allows for more flexibility and control over the execution process, enabling interactions that may not be possible using higher-level code alone***.
+***Note:In sway, the [assembly](https://docs.fuel.network/docs/sway/advanced/assembly/#asm-block) keyword `asm` is used to create an assemly inline block, declaring an `asm` block is similar to declaring a function but in low-level code, in this function the block executes the proposal's transaction. It allows for more flexibility and control over the execution process, enabling interactions that may not be possible using higher-level code alone***.
 
 When a proposal is executed, the assembly block extracts the necessary information from the proposal's transaction `call_data`, `amount`, `asset`, and `gas` and executes the transaction using these parameters. This allows the contract to perform the proposed action, such as transferring assets or invoking another contract function.
 
@@ -504,11 +514,13 @@ When a proposal is executed, the assembly block extracts the necessary informati
     }
 ```
 
-**Note: The [`call`](https://docs.fuel.network/docs/fuels-ts/contracts/methods/#call) keyword also used in the assmbly code block is  used to submit a real contract call transaction to the node. Here is a more in-depth read on the [call method](https://docs.fuel.network/docs/fuels-ts/contracts/methods/#call) and [call parameter](https://docs.fuel.network/docs/fuels-ts/contracts/call-parameters/)**
+**Note: The [`call`](https://docs.fuel.network/docs/fuels-ts/contracts/methods/#call) keyword also used in the assmbly code block is  used to submit a real contract call transaction to the node. Here is a more in-depth read on the [call method](https://docs.fuel.network/docs/fuels-ts/contracts/methods/#call) and [call parameters](https://docs.fuel.network/docs/fuels-ts/contracts/call-parameters/)**
 
 ### Unlocking all Votes
 
-This `unlock_votes` function unlocks votes cast by a user on a specific proposal within the DAO. 
+This function unlocks the votes of a memeber once a proposal's voting period has elapsed. Through its execution, members can regain their voting power, ensuring a fair and transparent democratic process within the DAO's ecosystem.
+
+The `unlock_votes` function unlocks votes cast by a user on a specific proposal within the DAO. 
 
 - It first checks if the `proposal_id` is valid in 
 `let proposal = storage.proposals.get(proposal_id).try_read().unwrap();`, ensuring it corresponds to an existing proposal within the DAO.
@@ -524,41 +536,50 @@ If the proposal is still active, the function stops execution and raises an erro
 Copy and paste the code below as your `unlock_votes` function.
 
 ```rust
-  #[storage(read, write)]
-  fn unlock_votes(proposal_id: u64) {
-    validate_id(proposal_id, storage.proposal_count.read());
+#[storage(read, write)]
+// Function to unlock votes for a given proposal
+fn unlock_votes(proposal_id: u64) {
+    // Validate the proposal ID
+    validate_id(proposal_id, storage.proposal_count.read());
 
-    let proposal = storage.proposals.get(proposal_id).try_read().unwrap();
-    require(
-      proposal
-        .deadline < height()
-        .as_u64(),
-      ProposalError::ProposalStillActive,
-    );
+    // Retrieve the proposal from storage and ensure it's no longer active
+    let proposal = storage.proposals.get(proposal_id).try_read().unwrap();
+    require(
+        proposal.deadline < height().as_u64(),
+        ProposalError::ProposalStillActive,
+    );
 
-    let user = msg_sender().unwrap();
-    let votes = storage.votes.get((user, proposal_id)).try_read().unwrap_or(Votes::default());
+    // Identify the user who initiated the function call
+    let user = msg_sender().unwrap();
+    
+    // Retrieve the user's votes for the proposal from storage or create default if not present
+    let votes = storage.votes.get((user, proposal_id)).try_read().unwrap_or(Votes::default());
 
-    storage.votes.insert((user, proposal_id), Votes::default());
+    // Initialize or update the user's votes for the proposal in storage
+    storage.votes.insert((user, proposal_id), Votes::default());
 
-    let vote_amount = votes.yes_votes + votes.no_votes;
-    storage
-      .balances
-      .insert(
-        user,
-        storage
-          .balances
-          .get(user)
-          .try_read()
-          .unwrap_or(0) + vote_amount,
-      );
+    // Calculate the total vote amount by summing up yes and no votes
+    let vote_amount = votes.yes_votes + votes.no_votes;
 
-    log(UnlockVotesEvent {
-      id: proposal_id,
-      user,
-      vote_amount,
-    });
-  }
+    // Update the user's balance in storage by adding the vote amount
+    storage
+        .balances
+        .insert(
+            user,
+            storage
+                .balances
+                .get(user)
+                .try_read()
+                .unwrap_or(0) + vote_amount,
+        );
+
+    // Log an event indicating that votes have been unlocked for the proposal by the user
+    log(UnlockVotesEvent {
+        id: proposal_id,
+        user,
+        vote_amount,
+    });
+}
 ```
 
 ### 6. Creating the Info Contract
@@ -1374,121 +1395,8 @@ Contract ID: 0x46478b5c88593bb98cd21e1655fc092ceefaa20234046ce0e8b31875f6985c50�
 Deployed in block 0x824efb7527a207e3efde9a83d191b87f30cee911abb9d75eed5bd404b55e8e95
 ```
 
-4. Copy your returned contract ID. You will need this to interact with your contract from the front end.
-
-
-## Building your DAO Frontend
-
-Follow the next few steps below. You will build a frontend for your smart contract:
-
-1. Confirm you are in your main directory and run the command below to clone your DAO's existing front end.
-
-```bash
-git clone https://github.com/Phenzic/fuel_frontend_starter
-``` 
-
-2. Next, run the command to change into the frontend directory and run the command to install all the packages.
-
-```bash
-cd fuel_frontend_starter
-npm install
-```
-
-3. Next, Inside your frontend directory, run the command `fuel init` to generate the `./fuel.config.ts`.
-You should get a similar response to the one below.
-
-```bash
-t --contracts ../contract/ --output ./src/contracts_api
-Config file created at:
-
- <your_absolute_path_to_the_directory>/Fuel_Dao/frontend/fuels.config.ts
-```
-
-5. Run the `npx fuels build` command to generate a TypeScript definition and interpret your contract's ABI JSON. You should get a response similar to the one below.
-
-```bash
-Generating types..
-🎉 Build completed successfully!
-```
-6. you will notice a new directory, `contracts-api`, generated in your frontend directory. It is the contract ABI and interfaces in TypeScript. You will need to make contract calls on your DAO front end.
-
-7. Head over to the files `<path-to-workspace>/frontend/src/components/Home.tsx`, `<path-to-workspace>/frontend/src/components/proposalCount.tsx`, and put in the generated contract id from your deployed contract in the variable `CONTRACT_ID`.
-
-
-## Running your Front End.
-Now that you have all that set, ensure you are still in your `frontend` directory and run the code below to start your DAO front end.
-
-```bash
-npm start
-```
-
-***Note: [Here](https://www.github.com/Phenzic/FuelDemoDAO) is a link to the complete codebase***.
-
-- Go to your browser, navigate to `localhost:3000`, and you should see the front end running. You will first notice a **Connect** button.
-![connect](./images/connect.png)
-
-- After clicking on **Connect**, you will be prompted to connect your Fuel wallet to initiate your contract and begin interacting with it.
-
-## The Frontend Code
-This section will break down the frontend application of this tutorial and how you can make changes to modify the designs or add more implementations to the current existing code.
-
-- Go to the components folder where there are four files inclusive, `Home.tsx`, `contractUtils.tsx`, `proposlCount.tsx` and `styles.tsx`
-
-## The Home Component
-The Home component is the main page of the frontend application for interacting with the DAO. It provides users with functionalities to connect their wallets, create and vote on proposals, view user information, and interact with the DAO contract. The component encapsulates the logic for handling these interactions and rendering the corresponding UI elements. 
-
-- It imports the necessary modules from React, custom hooks from the `@fuels/react` library, `contracts-api` modules, and styling.
-
-- It Initializes several state variables using the `useState` hook to manage user-related data, contract abi, proposal data, tab navigation, etc.
-
-An effect hook initialises the contract instance and fetches data when the component mounts or the wallet connection status changes.
-
-- Functions like `fetchProposals`, `createProposal`, `voteOnProposal`, and `getVoteAmount` are defined to interact with the DAO contract.
-![create_proposal](./images/create_proposal.png)
-
-## The ProposalCount Component
-
-The `ProposalCount` component contributes to the user experience by indicating the current number of proposals within the DAO.
-
-![proposal_vote](./images/proposal_vote.png)
-
- - It imports modules from React, the `contracts-api`, and the `fetchProposalCount` function from `contractUtils`.
- The component initializes a state variable, `proposalCount,` to store the total number of proposals. This count is initially set to `null`.
- - A `handleFetchProposalCount` function is defined to fetch the total count of proposals asynchronously. It first ensures that the `wallet` prop is available, representing the user's wallet. Then, it creates an instance of the DAO contract using `ContractAbi__factory` and calls `fetchProposalCount` to retrieve the count. Upon success, it updates the `proposalCount` state with the fetched count.
- - The `useEffect` hook triggers the `handleFetchProposalCount` function when the component mounts or changes the `wallet` prop.
- The component then renders a simple UI element to display the total number of proposals. This information is positioned at the top-right corner of the page.
- 
-## The Contract Utils Component 
-Certainly! Here's the breakdown of the provided component:
-
-## Contract Utility Functions
-These utility functions are responsible for interacting with the DAO contract and fetching relevant data needed for the frontend application:
-
-### fetchBalance
- This function asynchronously fetches the user's balance from the DAO contract.
-
-- It takes `contractInstance` (an instance of the DAO contract) and `setUserBalance` (a function to set the user's balance in the component state) as parameters.
-
-- Inside the function, it calls the `balance()` function on the contract instance to fetch the user's balance.
-- Upon success, it converts the balance to a number and sets it using the `setUserBalance` function.
-- If an error occurs during the process, it logs it to the console.
-
-### getUserAddress
-- This function asynchronously retrieves the user's address from their wallet.
-- It takes `wallet` as a parameter, representing the user's wallet.
-- If the wallet is available, it returns the user's address.
-- An error is thrown if the wallet is unavailable, indicating the user's wallet is disconnected.
-
-### fetchProposalCount
-- This function asynchronously fetches the total count of proposals from the DAO contract.
-- It takes `contractInstance` (an instance of the DAO contract) as a parameter.
-- Inside the function, it calls the `proposal_count()` function on the contract instance to fetch the count of proposals.
-- Upon success, the count is returned.
-- If an error occurs during the process, it logs it to the console.
-
-These functions enhance the user experience by providing real-time data and functionalities within the front-end application.
-
 ## Conclusion
 Congratulations on building your first Decentralized Autonomous Organization on the Fuel blockchain.
 You created your DAO contract using Sway, compiled it, and deployed it to the Fuel testnet using your developer wallet configured locally. You also generated an ABI instance to make contract calls on your front-end application.
 After this experience, it goes beyond saying the skills you have acquired to go on building more complex solutions on the Fuel blockchain.
+
