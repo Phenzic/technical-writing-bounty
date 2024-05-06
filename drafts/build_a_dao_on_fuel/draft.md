@@ -583,7 +583,7 @@ fn unlock_votes(proposal_id: u64) {
 ```
 
 ### 6. Creating the Info Contract
-You will create an' Info' contract on your `main.sw` file to serve as your `abi`. Each function provides information about the State of the Dao contract, including `balances`, `votes`, and `proposals`. It defines how external smart contracts can query the status and details of your Dao Contract.
+You will create an `Info` contract on your `main.sw` file to serve as your `abi`. Each function provides information about the State of the Dao contract, including `balances`, `votes`, and `proposals`. It defines how external smart contracts can query the status and details of your Dao Contract.
 
 Copy and paste the code below the `main.sw` file.
 
