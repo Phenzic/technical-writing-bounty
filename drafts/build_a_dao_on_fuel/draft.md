@@ -29,7 +29,7 @@ To follow this tutorial seamlessly, you should be familiar with the following:
 
 ## Getting Started
 
-Before you delve into the main topic, here are some concepts to jug your memory on the Fuel ecosystem and help you better understand words you will see throughout this tutorial.
+Before you delve into the main topic, here are some concepts on the Fuel ecosystem to help you better understand terms you will see throughout this tutorial.
 
 **Fuel**: [Fuel](https://fuel.network/) is an operating system purpose-built for Ethereum rollups, designed to help developers build decentralized economies at scale.
 
