@@ -19,13 +19,12 @@ By completing this article, you will learn how to create a DAO contract on the F
 
 To follow this tutorial seamlessly, you should be familiar with the following:
 
-1. [Installation](https://docs.fuel.network/guides/installation/) of dependencies like `fuel` and `sway` extensions on vscode, `rustc`, `cargo`, `rustup`, and `cargo-generate` on your machine.
-2. Node version ^18.18.2 || ^20.0.0.
-3. You should have `wsl` installed if you are using a Windows or Mac PC. You can use the code `wsl --install` to install `wsl`.
-4. Knowledge of FuelVM and other Fuel tools.
-5. Basic concept of blockchain technology.
-6. Writing, compiling, and deploying to any blockchain (EVM or non-EVM compatible blockchain).
-7. Understand concepts of [ABIs](https://docs.fuel.network/guides/quickstart/building-a-smart-contract/#abi), Faucets, and wallet connect.
+1. Node version ^18.18.2 || ^20.0.0.
+2. You should have `wsl` installed if you are using a Windows or Mac PC. You can use the code `wsl --install` to install `wsl`.
+3. Knowledge of FuelVM and other Fuel tools.
+4. Basic concept of blockchain technology.
+5. Writing, compiling, and deploying to any blockchain (EVM or non-EVM compatible blockchain).
+6. Understand concepts of [ABIs](https://docs.fuel.network/guides/quickstart/building-a-smart-contract/#abi), Faucets, and wallet connect.
 
 ## Getting Started
 
