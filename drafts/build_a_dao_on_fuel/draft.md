@@ -518,7 +518,7 @@ When a proposal is executed, the assembly block extracts the necessary informati
 
 ### Unlocking all Votes
 
-This function unlocks the votes of a memeber once a proposal's voting period has elapsed. Through its execution, members can regain their voting power, ensuring a fair and transparent democratic process within the Dao's ecosystem.
+This function unlocks the votes of a member once a proposal's voting period has elapsed. Through its execution, members can regain their voting power, ensuring a fair and transparent democratic process within the Dao's ecosystem.
 
 The `unlock_votes` function unlocks votes cast by a user on a specific proposal within the Dao. 
 
