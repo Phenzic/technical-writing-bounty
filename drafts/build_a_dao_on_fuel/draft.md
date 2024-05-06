@@ -6,7 +6,7 @@
 
 A Decentralized Autonomous Organization (DAO) is considered an essential blockchain application.
 
-It is a decentralized application that users or organizations use to automate the governance execution of their projects and communities. The automated program is represented by rules encoded in a network of computers that is transparently controlled by the organization members and not influenced by any central authority.
+It is a decentralized application that users or organizations use to automate the governance of their projects and communities. The automated program is represented by rules encoded in a network of computers that is transparently controlled by the organization members and not influenced by any central authority.
 
 By completing this article, you will learn how to create a Dao contract on the Fuel blockchain. You will also gain knowledge about the following concepts:
 
