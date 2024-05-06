@@ -1379,7 +1379,7 @@ First, ensure you are in your contract directory, and run the command `forc buil
 
 ## Deploying your smart contract
 
-Following the next few steps, you will deploy your contract to the Fuel `beta-4` testnet.
+Following the next few steps, you will deploy your contract to the Fuel `beta-5` testnet.
 
 Assuming you already have your developer wallet configured locally and that your wallet details, including your password, are safely stored. If not, follow the steps [here](https://github.com/FuelLabs/forc-wallet) or watch [this](https://www.youtube.com/watch?v=YiNRgaQvoqo).
 
