@@ -295,7 +295,7 @@ Copy and paste the code below using your `create_proposal` function.
     });
   }
 ```
-Note: You will notice similar convention to writing a rust smart contract when creating a new function with `fn` or importing modules with `mod`. Here is a better read on the [similarities](https://docs.fuel.network/docs/intro/what-is-fuel/#rust--solidity--sway) and [differences](https://docs.fuel.network/docs/sway/reference/rust_differences/#differences-from-rust) between sway and rust. 
+Note: You will notice similar convention to writing a Rust smart contract when creating a new function with `fn` or importing modules with `mod`. Here is a better read on the [similarities](https://docs.fuel.network/docs/intro/what-is-fuel/#rust--solidity--sway) and [differences](https://docs.fuel.network/docs/sway/reference/rust_differences/#differences-from-rust) between Sway and Rust. 
 
 ### Depositing Token
 
