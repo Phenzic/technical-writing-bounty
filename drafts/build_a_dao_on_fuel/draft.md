@@ -1113,7 +1113,7 @@ The `InsufficientBalance` error indicates that the user has insufficient balance
   ```
 
 ## 3. The Data Structure Library
- Next, go to your `data_structures.sw` file to implement a new library contract that defines the data structures and associated functions to manage proposals and votes within a voting system. 
+ Next, go to your `data_structures.sw` file to implement a new library that defines the data structures and associated functions to manage proposals and votes within a voting system. 
 
 Copy and paste the entire code below into the file.
 
