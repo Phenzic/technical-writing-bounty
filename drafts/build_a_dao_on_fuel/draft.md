@@ -132,7 +132,7 @@ All of these are libraries you will be creating later in this tutorial.
 
 Next, you will initialize a set of persistent [storage](https://docs.fuel.network/docs/sway/blockchain-development/storage/#storage) needed throughout your contract.
 
-***Note: Storage initialization is one of the similar patterns in [solidity](https://docs.fuel.network/docs/intro/what-is-fuel/#rust--solidity--sway) that sway supports as well.***
+***Note: Storage initialization is one of the similar patterns in [Solidity](https://docs.fuel.network/docs/intro/what-is-fuel/#rust--solidity--sway) that Sway supports as well.***
 
 This contract initializes the storage with the keyword `storage{}` and has a list of the variables and their storage types. To read or write to the storage type respectfully, use the `storage` keyword and `.try_read()` or `.write()`.
 Follow the [guide](https://docs.fuel.network/docs/sway/common-collections/storage_map) to know more about managing storage maps and their types. 
