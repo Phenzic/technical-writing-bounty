@@ -1,6 +1,6 @@
 [note]: <> ("note to self and file editor, there are specific comments left throughout this file, for the sake of understanding the author's reason for using a particular method of approach; please feel free to delete once acknowledged or reply edit with a better approach 🥂")
 
-# How to Build a DAO on the Fuel blockchain.
+# How to Build a Dao on the Fuel Blockchain
 
 ## Introduction
 
@@ -8,10 +8,10 @@ A Decentralized Autonomous Organization (DAO) is considered an essential blockch
 
 It is a decentralized application that users or organizations use to automate the governance of their projects and communities. The automated program is represented by rules encoded in a network of computers that is transparently controlled by the organization members and not influenced by any central authority.
 
-By completing this article, you will learn how to create a Dao contract on the Fuel blockchain. You will also gain knowledge about the following concepts:
+By completing this article, you will learn how to create a DAO contract on the Fuel blockchain. You will also gain knowledge about the following concepts:
 
-1. Writing a smart contract using the sway language.
-2. Understanding how to use low-level code fundamentals in sway `asm`, `call`, etc.
+1. Writing a smart contract using the Sway language.
+2. Understanding how to use low-level code fundamentals in Sway `asm`, `call`, etc.
 3. Wallet configuration
 4. How to compile and deploy to the Fuel blockchain.
 
@@ -19,7 +19,7 @@ By completing this article, you will learn how to create a Dao contract on the F
 
 To follow this tutorial seamlessly, you should be familiar with the following:
 
-1. [Installation](https://docs.fuel.network/guides/installation/) of dependencies like `fuel`, `sway` extensions on vscode, `rustc`, `cargo`, `rustup` `cargo-generate`, on your machine.
+1. [Installation](https://docs.fuel.network/guides/installation/) of dependencies like `fuel` and `sway` extensions on vscode, `rustc`, `cargo`, `rustup`, and `cargo-generate` on your machine.
 2. Node version ^18.18.2 || ^20.0.0.
 3. You should have `wsl` installed if you are using a Windows or Mac PC. You can use the code `wsl --install` to install `wsl`.
 4. Knowledge of FuelVM and other Fuel tools.
@@ -29,7 +29,7 @@ To follow this tutorial seamlessly, you should be familiar with the following:
 
 ## Getting Started
 
-Before you delve into the main topic, here are some concepts on the Fuel ecosystem to help you better understand terms you will see throughout this tutorial.
+Before you delve into the main topic, here are some concepts on the Fuel ecosystem to help you better understand the terms you will see throughout this tutorial.
 
 **Fuel**: [Fuel](https://fuel.network/) is an operating system purpose-built for Ethereum rollups, designed to help developers build decentralized economies at scale.
 
@@ -39,26 +39,26 @@ Before you delve into the main topic, here are some concepts on the Fuel ecosyst
 
 **ABI**: These are called [Application Binary Interfaces](https://docs.fuel.network/guides/intro-to-sway/contract-abi/); they are the blueprint or interaction models of your smart contract, it is a layout of the detailed functionalities in your smart contract, and how to interact with it.
 
-## Setting up your Environment
+## Setting up Your Environment
 
-In the next few steps, you will set up your development environment to begin building the smart contract of your Dao.
+In the next few steps, you will set up your development environment to begin building the smart contract of your DAO.
 
 1. Go to your terminal and run the command `wsl` to start your wsl terminal if you are using a Windows
 
 2. Run the commands below in your terminal to generate your new contract directory and Fuel development workspace. (If you have previously not installed the Fuel toolchain, first run `curl https://install.fuel.network | sh` in your terminal.)
 
 ```bash
-$ mkdir Fuel_Dao
-$ cd Fuel_Dao
+$ mkdir Fuel_DAO
+$ cd Fuel_DAO
 $ forc new contract
 ```
 
-## Writing your Smart Contract
+## Writing Your Smart Contract
 
 Head to the `main.sw` contract file, where you will implement your main contracts. Following the next few steps, you will replace the code therein.
 
-### 1. Importing from the modules 
-First, you will define the file as a contract and import the following modules from the sway standard library using the key `use` and namespace qualifier `::`: 
+### 1. Importing From the Modules
+First, you will define the file as a contract and import the following modules from the Sway standard library using the key `use` and namespace qualifier `::`: 
   
 - `asset::transfer`: This provides the functionality for transferring assets.
 
@@ -89,12 +89,12 @@ use std::{
   };
 ```
 
-### 2. Importing The Library Contracts
+### 2. Importing the Library Contracts
 Next, you will import other contract libraries and interfaces from the following, using the module keyword `mod` to import them from modules in the same directory as your `main.sw`.
 
 Copy and replace the existing code in your `main.sw` file with the one below.
 
-[note]: <> (I use Rust for all snippets rather than sway since both languages are similar and Rust's is recognized on prettifier for markdown code snippets)
+[note]: <> (I use Rust for all snippets rather than Sway since both languages are similar and Rust's is recognized on prettifier for markdown code snippets)
   
 ```rust 
 mod data_structures;
@@ -137,17 +137,17 @@ Next, you will initialize a set of persistent [storage](https://docs.fuel.networ
 This contract initializes the storage with the keyword `storage{}` and has a list of the variables and their storage types. To read or write to the storage type respectfully, use the `storage` keyword and `.try_read()` or `.write()`.
 Follow the [guide](https://docs.fuel.network/docs/sway/common-collections/storage_map) to know more about managing storage maps and their types. 
 
-- `balances`: This variable stores an object mapping the user's identity (address) to the total amount of deposited tokens `64-unsigned int` they have your Dao contract.
+- `balances`: This variable stores an object mapping the user's identity (address) to the total amount of deposited tokens `64-unsigned int` they have your DAO contract.
 
-- `proposals`: This storage maps a `64-unsigned int` to a new proposal information `struct`, keeping track of every new proposal in your Dao that a user makes on the Dao contract.
+- `proposals`: This storage maps a `64-unsigned int` to a new proposal information `struct`, keeping track of every new proposal in your DAO that a user makes on the DAO contract.
 
-- `proposal_count`: This defines a simple `64 unsigned int` that tracks the total number of proposals created uniquely in your Dao.
+- `proposal_count`: This defines a simple `64 unsigned int` that tracks the total number of proposals created uniquely in your DAO.
 
 - `state`: This defines a state variable that tracks the contract's state and is set to `NotInitialized` by default.
 
-- `asset`: This variable stores the contract ID of a governance asset. This asset i  regardd as the only acceptable asset used in the Dao contract, If a user try's to interact with the Dao using any other asset aside the one initialized with the contract, the event is rejected.
+- `asset`: This variable stores the contract ID of a governance asset. This asset is regarded as the only acceptable asset used in the DAO contract; if a user tries to interact with the DAO using an asset other than the one initialized with the contract, the event is rejected.
 
-- `votes`: This storage also keeps an object map of the user's `Identity` to their `vote` as `64-unsigned int` for an opened proposal on your Dao. So, if a user votes on a proposal, their identity and vote are stored as a map here.
+- `votes`: This storage also keeps an object map of the user's `Identity` to their `vote` as `64-unsigned int` for an opened proposal on your DAO. So, if a user votes on a proposal, their identity and vote are stored as a map here.
 Copy and add the code below to your `main.sw` contract.
 
 ```rust
@@ -172,10 +172,10 @@ storage {
 }
 ```
 
-### 4. Creating the DAO Contract
-For the entire use case of this tutorial, we'll consider creating a Dao for a local community of builders (); the Dao will be responsible for managing all funds and proposals for community projects. We'll call it **ComunityBuidDao**. This name is not necessarily encoded into the contract. It is what we will call the community. 
+### 4. Creating the Dao Contract
+For the entire use case of this tutorial, we'll consider creating a DAO for a local community of builders (); the DAO will be responsible for managing all funds and proposals for community projects. We'll call it **ComunityBuidDAO**. This name is not necessarily encoded into the contract. It is what we will call the community. 
 
-To define the functions in your Dao contract, copy and paste the code below. In the next few steps, you will create and understand each function in the Dao contract.
+To define the functions in your DAO contract, copy and paste the code below. In the next few steps, you will create and understand each function in the DAO contract.
 
 
 ```rust
@@ -216,7 +216,7 @@ impl DaoVoting for Contract {
 }
 ```
 ### The Constructor Function
-The constructor function can only be called once on creating the contract by the owner of the contract to initialize the storage variables of the asset to be accepted by the Dao, and set the initial state of the contract.
+The constructor function can only be called once when creating the contract by the contract owner to initialise the asset's storage variables to be accepted by the DAO and set the initial state of the contract.
 
 This function initializes the contract by taking in an asset_id (token). It then checks the state variable 'State::NotInitialized' to ensure the contract wasn't previously initialised. If it has been initialized, it returns a `reinitialization` error from `InitializationError::CannotReinitialize`. 
 
@@ -244,19 +244,19 @@ Copy and paste the code below as your `constructor` function.
   }
 ```
 
-You will notice in the code above the storage asset is being accessed and updated using the `.write` keyword by passing in the function's inputed `asset`. This is how storage can be modified in sway.
+You will notice in the code above the storage asset is being accessed and updated using the `.write` keyword by passing in the function's input `asset`. This is how storage can be modified in Sway.
 
-And to read from a storage variable , the `.read()` keyword is used like in the require statement above where it is checking the current state is `NotInitialize`.
+To read from a storage variable, the `.read()` keyword is used, as in the required statement above, which checks whether the current state is `NotInitialize`.
 
-And to log events, the `log` keyword is used by passing in a struct containing the event name `InitializeEvent` in `()` and the relevant event details like the `author`, `asset`, similar to how it is done in [rust](https://docs.fuel.network/docs/intro/what-is-fuel/#rust--solidity--sway).
+To log events, the `log` keyword is used by passing in a struct containing the event name `InitializeEvent` in `()` and the relevant event details like the `author` and `asset`, similar to how it is done in [rust](https://docs.fuel.network/docs/intro/what-is-fuel/#rust--solidity--sway).
 
 ***Note: Later in the tutorial, you'll create the functions for emitting events and error handling in the other library contracts. For now, you can import them as modules from the same directory.***
 
 ### Creating Proposals
-The Create Proposal function allow any Dao member to submit a proposal for funding or starting a new project. It tracks the members funding proposals that request specific tokens from the Dao treasury. A proposal must be submitted to the Dao contract to start the voting process.
+The Create Proposal function allows any DAO member to submit a funding proposal or start a new project. It tracks the members' funding proposals for specific tokens from the DAO treasury. A proposal must be submitted to the DAO contract before voting can start.
 
 The `create_proposal()` function is implemented by taking in 3 input `acceptance_percentage: u64`, `duration: u64`, and `proposal_transaction: Proposal`, then it checks if the duration is greater than zero `require(0 < duration, CreationError::DurationCannotBeZero);`. 
- And if the acceptance percentage is within the valid range (0-100) `require(0 < acceptance_percentage && acceptance_percentage <= 100, CreationError::InvalidAcceptancePercentage,);`.
+ And if the acceptance percentage is within the valid range (0-100), `require(0 < acceptance_percentage && acceptance_percentage <= 100, CreationError::InvalidAcceptancePercentage,);`.
 
 If no error is emitted, it constructs a `ProposalInfo` object and inserts it into the storage, incrementing the proposal count. Finally, it logs a `CreateProposalEvent` to record the proposal's creation. The function does not require a token amount to be deposited when creating a new proposal.
 
@@ -295,13 +295,13 @@ Copy and paste the code below using your `create_proposal` function.
     });
   }
 ```
-Note: You will notice similar convention to writing a Rust smart contract when creating a new function with `fn` or importing modules with `mod`. Here is a better read on the [similarities](https://docs.fuel.network/docs/intro/what-is-fuel/#rust--solidity--sway) and [differences](https://docs.fuel.network/docs/sway/reference/rust_differences/#differences-from-rust) between Sway and Rust. 
+Note: You will notice a similar convention to writing a Rust smart contract when creating a new function with `fn` or importing modules with `mod`. Here is a better read on the [similarities](https://docs.fuel.network/docs/intro/what-is-fuel/#rust--solidity--sway) and [differences](https://docs.fuel.network/docs/sway/reference/rust_differences/#differences-from-rust) between Sway and Rust. 
 
 ### Depositing Token
 
-The Dao also lets users deposit assets (tokens) into the contract. Users who want to contribute to a proposal or the Dao treasury can use this function to send assets to the contract. It takes an `amount: u64` input and allows users to deposit `assets` (tokens) into the Dao.
+The DAO also lets users deposit assets (tokens) into the contract. Users who want to contribute to a proposal or the DAO treasury can use this function to send assets to the contract. It takes an `amount: u64` input and allows users to deposit `assets` (tokens) into the DAO.
 
-The deposit function is marked as [payable](https://docs.fuel.network/docs/fuels-rs/cookbook/deposit-and-withdraw/), meaning it can receive tokens along with the function call. You can also transfer assets in sway using the [`transfer()` function](https://docs.fuel.network/docs/fuels-rs/cookbook/transfer-all-assets/#transfer-all-assets) passing in the receiving `address`, token id and intended `amount` to transfer.
+The deposit function is marked as [payable](https://docs.fuel.network/docs/fuels-rs/cookbook/deposit-and-withdraw/), meaning it can receive tokens along with the function call. You can also transfer assets in Sway using the [`transfer()` function](https://docs.fuel.network/docs/fuels-rs/cookbook/transfer-all-assets/#transfer-all-assets) passing in the receiving `address`, token id and intended `amount` to transfer.
 
 This function first ensures that the contract is initialized `(State::Initialized)`, verifies that the correct asset is being sent `msg_asset_id()`, and requires that the deposited amount is greater than zero `require(0 < msg_amount(), UserError::AmountCannotBeZero);`. Upon successful validation, it updates the user's balance in the contract's storage, logs a `DepositEvent`, and records the deposited amount and the user's address.
 
@@ -345,15 +345,15 @@ Copy and paste the code below as your `deposit` function.
 
 ```
 
-***Note: In Sway, It is conventional to add a comment of the function types before implementing them, for exmaple `##[payable, storage(read, write)]` as it is done throughout this article***.
+***Note: In Sway, It is conventional to add a comment on the function types before implementing them, for example, `##[payable, storage(read, write)]` as it is done throughout this article***.
 
 ### Withdrawing Tokens
 
-Similar to users depositing into the contract, the withdraw function is alo marked as `payable` after a proposal's duration has been exceeded, assuming it ended with more upvotes than downvotes and all other conditions are met, the Dao will allow users to withdraw their tokens from the contract.
+Similar to users depositing into the contract, the withdraw function is also marked as `payable` after a proposal's duration has been exceeded. Assuming it ended with more upvotes than downvotes and all other conditions are met, the DAO will allow users to withdraw their tokens from the contract.
 
-Assuming a proposal to start a new building for physical meetups was proposed, and the proposal passed with 70% votes in favor after two weeks, the Dao would register this proposal as successful and the `withdraw` function can be used to tranfer the contributed amount from the treasury to the address of the user calling the function.
+Assuming a proposal to start a new building for physical meetups was made and passed with 70% votes in favour after two weeks, the DAO would register this proposal as successful, and the `withdraw` function can be used to transfer the contributed amount from the treasury to the address of the user calling the function.
 
-This function takes in an `amount: u64` input and allows users to withdraw `assets` (tokens) from the Dao, provided they have a sufficient balance `require(0 < amount, UserError::AmountCannotBeZero)`. It ensures that the withdrawal amount is valid, deducts the withdrawn amount from the user's balance `let prev_balance = storage.balances.get(user).try_read().unwrap_or(0);`, to transfer the assets back to the user `storage.balances.insert(user, prev_balance - amount);`, and logs a `WithdrawEvent` to record the withdrawal action.
+This function takes in an `amount: u64` input and allows users to withdraw `assets` (tokens) from the DAO, provided they have a sufficient balance `require(0 < amount, UserError::AmountCannotBeZero)`. It ensures that the withdrawal amount is valid, deducts the withdrawn amount from the user's balance `let prev_balance = storage.balances.get(user).try_read().unwrap_or(0);`, to transfer the assets back to the user `storage.balances.insert(user, prev_balance - amount);`, and logs a `WithdrawEvent` to record the withdrawal action.
 
 Copy and paste the code below as your `withdraw` function.
 
@@ -377,7 +377,7 @@ Copy and paste the code below as your `withdraw` function.
 
 ### Voting for a Proposal
 
-The vote function enables users to vote on a specific proposal already created within the Dao. Users can choose to either approve or reject the proposal by specifying their vote `approve: bool`, the ID of the proposal they are voting on `proposal_id: u64`, and the amount of their vote `vote_amount: u64`.
+The vote function enables users to vote on a specific proposal already created within the DAO. Users can choose to either approve or reject the proposal by specifying their vote `approve: bool`, the ID of the proposal they are voting on `proposal_id: u64`, and the amount of their vote `vote_amount: u64`.
 
 The function creates a mutable variable with the `mut` keyword to store the intended proposal from the contract storage and checks if all requirements to keep the proposal active are met.
 
@@ -437,9 +437,9 @@ fn vote(approve: bool, proposal_id: u64, vote_amount: u64) {
 
 ### Executing a Proposal
 
-When a Dao members propose changes to the organization's operations, and these proposals are voted upon by the community. Once a proposal has garnered sufficient approval, it needs to be executed to enact its changes.
+When DAO members propose changes to the organization's operations, the community votes on them. Once a proposal has garnered sufficient approval, it must be executed to enact its changes.
 
-Inside the execute function, the proposal's details are retrieved from storage. It checks that the proposal has not been executed already, has passed its deadline, and meets the required acceptance percentage. Once verified, the proposal's executed flag is set to true to mark it as completed.
+Inside the execute function, the proposal's details are retrieved from storage. It checks that the proposal has not been executed, has passed its deadline, and meets the required acceptance percentage. Once verified, the proposal's executed flag is set to true to mark it as completed.
 
 The function takes in a `proposal_id` and executes the proposal if it meets the following condition requirements,
 - It validates the `validate_id(proposal_id, storage.proposal_count.read())`, 
@@ -499,7 +499,7 @@ fn execute(proposal_id: u64) {
 
 ```
 
-***Note:In Sway, the [assembly](https://docs.fuel.network/docs/sway/advanced/assembly/#asm-block) keyword `asm` is used to create an assembly inline block, declaring an `asm` block is similar to declaring a function but in low-level code, in this function the block executes the proposal's transaction. It allows for more flexibility and control over the execution process, enabling interactions that may not be possible using higher-level code alone***.
+***Note: In Sway, the [assembly](https://docs.fuel.network/docs/sway/advanced/assembly/#asm-block) keyword `asm` creates an assembly inline block. Declaring an `asm` block is similar to declaring a function but in low-level code. In this function, the block executes the proposal's transaction. It allows for more flexibility and control over the execution process, enabling interactions that may not be possible using higher-level code alone***.
 
 When a proposal is executed, the assembly block extracts the necessary information from the proposal's transaction `call_data`, `amount`, `asset`, and `gas` and executes the transaction using these parameters. This allows the contract to perform the proposed action, such as transferring assets or invoking another contract function.
 
@@ -514,16 +514,16 @@ When a proposal is executed, the assembly block extracts the necessary informati
     }
 ```
 
-**Note: The [`call`](https://docs.fuel.network/docs/fuels-ts/contracts/methods/#call) keyword also used in the assmbly code block is  used to submit a real contract call transaction to the node. Here is a more in-depth read on the [call method](https://docs.fuel.network/docs/fuels-ts/contracts/methods/#call) and [call parameters](https://docs.fuel.network/docs/fuels-ts/contracts/call-parameters/)**
+**Note: The [`call`](https://docs.fuel.network/docs/fuels-ts/contracts/methods/#call) keyword, also used in the assembly code block, is  used to submit a real contract call transaction to the node. Here is a more in-depth read on the [call method](https://docs.fuel.network/docs/fuels-ts/contracts/methods/#call) and [call parameters](https://docs.fuel.network/docs/fuels-ts/contracts/call-parameters/)**
 
-### Unlocking all Votes
+### Unlocking All Votes
 
-This function unlocks the votes of a member once a proposal's voting period has elapsed. Through its execution, members can regain their voting power, ensuring a fair and transparent democratic process within the Dao's ecosystem.
+This function unlocks the votes of a member once a proposal's voting period has elapsed. Through its execution, members can regain their voting power, ensuring a fair and transparent democratic process within the DAO's ecosystem.
 
-The `unlock_votes` function unlocks votes cast by a user on a specific proposal within the Dao. 
+The `unlock_votes` function unlocks votes cast by a user on a specific proposal within the DAO. 
 
 - It first checks if the `proposal_id` is valid in 
-`let proposal = storage.proposals.get(proposal_id).try_read().unwrap();`, ensuring it corresponds to an existing proposal within the Dao.
+`let proposal = storage.proposals.get(proposal_id).try_read().unwrap();`, ensuring it corresponds to an existing proposal within the DAO.
 
 - It checks if the proposal's deadline has passed `require(proposal.deadline < height().as_u64(),`,`. 
 If the proposal is still active, the function stops execution and raises an error indicating that the proposal is still active.
@@ -531,7 +531,7 @@ If the proposal is still active, the function stops execution and raises an erro
 - The function then retrieves the identity of the user who triggered the function call `let user = msg_sender().unwrap();.`
      and attempts to read the votes cast by this user on the specified proposal `let votes = storage.votes.get((user, proposal_id)).try_read().unwrap_or(Votes::default());`. If no votes are found, it defaults to an empty set of votes
 
-- It then resets the user's votes on the specified proposal, effectively removing their influence on the proposal's outcome, `storage.votes.insert((user, proposal_id), Votes::default());`.
+- It then resets the user's votes on the specified proposal, effectively removing their influence on its outcome, `storage.votes.insert((user, proposal_id), Votes::default());`.
 
 Copy and paste the code below as your `unlock_votes` function.
 
@@ -583,7 +583,7 @@ fn unlock_votes(proposal_id: u64) {
 ```
 
 ### 6. Creating the Info Contract
-You will create an `Info` contract on your `main.sw` file to serve as your `abi`. Each function provides information about the State of the Dao contract, including `balances`, `votes`, and `proposals`. It defines how external smart contracts can query the status and details of your Dao Contract.
+You will create an `Info` contract on your `main.sw` file as your `abi`. Each function provides information about the State of the DAO contract, including `balances`, `votes`, and `proposals`. It defines how external smart contracts can query the status and details of your DAO Contract.
 
 Copy and paste the code below the `main.sw` file.
 
@@ -694,7 +694,7 @@ Copy and replace the `proposal_count` function with the code below.
 
 Your `main.sw` contract file should look like the one below.
 
-[note]: <> (I tried using syntax for shortening code snippets, like the one used in the sway docs; perhaps it could be used here to shorten the entirety of the tutorial length.)
+[note]: <> (I tried using syntax for shortening code snippets, like the one used in the Sway docs; perhaps it could be used here to shorten the entirety of the tutorial length.)
 
 ```rust
 contract;
@@ -1055,7 +1055,7 @@ The `CreationError` has two variants:
 
 The `DurationCannotBeZero` variant represents an error indicating that a proposal's duration cannot be zero. In other words, when attempting to create a proposal, if the duration specified for the proposal is zero, this error will be raised.
 
-- The `InvalidAcceptancePercentage` variant represents an error indicating that the acceptance percentage of a proposal is invalid. When creating a proposal, this error will be raised if the specified acceptance percentage falls outside the valid range (0-100). 
+The `InvalidAcceptancePercentage` variant indicates that a proposal's acceptance percentage is invalid. This error will be raised when creating a proposal if the specified acceptance percentage falls outside the valid range (0-100). 
 
   ```rust
   pub enum CreationError {
@@ -1206,7 +1206,7 @@ impl Votes {
 - `function_selector` represents the function selector, typically a hash of the function signature.
 - `id`: An instance of ContractId, which identifies the contract in the function call.
 
-### The proposal Struct
+### The Proposal Struct
 
 This struct is utilized within the smart contract to encapsulate information about a `proposal`. When a user creates a `proposal` within the contract, they provide details such as the amount of assets involved `amount`, the specific asset being proposed `asset`, the details of the function call `call_data`, and the allocated gas for executing the proposal `gas`. This `struct` serves as a container for organizing and managing proposal-related data within the contract's logic.
 
@@ -1227,7 +1227,7 @@ It holds the number of `no` and `yes` votes for a proposal. Its implementation i
 
 
 ## 4. The Interface Library
- Go to your `interface.sw` contract file. Here, you will create your `DaoVoting` abi. The file will also have the `Info` contract ABI that provides methods to query information about the Dao.
+ Go to your `interface.sw` contract file. Here, you will create your `DaoVoting` abi. The file will also have the `Info` contract ABI that provides methods to query information about the DAO.
 
 Copy and add the code below in your `interface.sw` contract file.
 
@@ -1299,7 +1299,7 @@ abi Info {
 ```
 
 ## 5. The Event Emitters
-Next, Go to your `event.sw` contract file, where you will set event structs that are emitted during various actions within your Dao. Each event corresponds to a specific action or state change within the Dao.
+Next, Go to your `event.sw` contract file, where you will set event structs that are emitted during various actions within your DAO. Each event corresponds to a specific action or state change within the DAO.
 
 Copy and Paste the code below into your `event.sw` contract file.
 
@@ -1371,20 +1371,20 @@ pub fn validate_id(id: u64, count: u64) {
 }
 ```
 
-### Compiling your Smart Contract
+### Compiling Your Smart Contract
 
 First, ensure you are in your contract directory, and run the command `forc build`. You should get a response similar to the one in the image below.
 
 ![forc_build](./images/forc_compile.png)
 
-## Deploying your smart contract
+## Deploying Your Smart Contract
 
 Following the next few steps, you will deploy your contract to the Fuel `beta-5` testnet.
 
-Assuming you already have your developer wallet configured locally and that your wallet details, including your password, are safely stored. If not, follow the steps [here](https://github.com/FuelLabs/forc-wallet) or watch [this](https://www.youtube.com/watch?v=YiNRgaQvoqo).
+Assuming you already have your developer wallet configured locally and your wallet details, including your password, are safely stored. If not, follow the steps [here](https://github.com/FuelLabs/forc-wallet) or watch [this](https://www.youtube.com/watch?v=YiNRgaQvoqo).
 
 
-1. First, you need to get your test faucet coins to deploy and make transactions on your contract. Head over to the test faucet to get your tokens.
+1. First, you must get your test faucet coins to deploy and make transactions on your contract. Head over to the test faucet to get your tokens.
 
 2. Run the command `forc deploy --testnet`. You should get a response similar to the one below.
 
@@ -1398,13 +1398,13 @@ Deployed in block 0x824efb7527a207e3efde9a83d191b87f30cee911abb9d75eed5bd404b55e
 
 ## Conclusion
 Congratulations on building your first Decentralized Autonomous Organization on the Fuel blockchain.
-You created your Dao contract using Sway, compiled it, and deployed it to the Fuel testnet using your developer wallet configured locally. You also generated an ABI instance to make contract calls on your front-end application.
+You created your DAO contract using Sway, compiled it, and deployed it to the Fuel testnet using your developer wallet configured locally. You also generated an ABI instance to make contract calls on your front-end application.
 After this experience, it goes beyond saying the skills you have acquired to go on building more complex solutions on the Fuel blockchain.
 
 
 ## Resources
 Here are links to resources that were used throughout this tutorial:
-1. [Complete Sway Dao Contract](https://github.com/Phenzic/FuelDemoDAO/) 
+1. [Complete Sway DAO Contract](https://github.com/Phenzic/FuelDemoDAO/) 
 2. [Fuel Wallet Integration](https://github.com/FuelLabs/forc-wallet)
 3. [Sway Documentation](https://docs.fuel.network/docs/intro/what-is-fuel)
 
