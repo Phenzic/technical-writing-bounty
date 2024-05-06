@@ -499,7 +499,7 @@ fn execute(proposal_id: u64) {
 
 ```
 
-***Note:In sway, the [assembly](https://docs.fuel.network/docs/sway/advanced/assembly/#asm-block) keyword `asm` is used to create an assemly inline block, declaring an `asm` block is similar to declaring a function but in low-level code, in this function the block executes the proposal's transaction. It allows for more flexibility and control over the execution process, enabling interactions that may not be possible using higher-level code alone***.
+***Note:In Sway, the [assembly](https://docs.fuel.network/docs/sway/advanced/assembly/#asm-block) keyword `asm` is used to create an assembly inline block, declaring an `asm` block is similar to declaring a function but in low-level code, in this function the block executes the proposal's transaction. It allows for more flexibility and control over the execution process, enabling interactions that may not be possible using higher-level code alone***.
 
 When a proposal is executed, the assembly block extracts the necessary information from the proposal's transaction `call_data`, `amount`, `asset`, and `gas` and executes the transaction using these parameters. This allows the contract to perform the proposed action, such as transferring assets or invoking another contract function.
 
