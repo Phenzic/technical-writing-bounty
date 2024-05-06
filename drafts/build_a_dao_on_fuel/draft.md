@@ -13,7 +13,7 @@ By completing this article, you will learn how to create a Dao contract on the F
 1. Writing a smart contract using the sway language.
 2. Understanding how to use low-level code fundamentals in sway `asm`, `call`, etc.
 3. Wallet configuration
-4. How to compile and deploy to the Fuel blockchain (testnet).
+4. How to compile and deploy to the Fuel blockchain.
 
 ## Prerequisites
 
