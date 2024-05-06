@@ -25,7 +25,7 @@ To follow this tutorial seamlessly, you should be familiar with the following:
 4. Knowledge of FuelVM and other Fuel tools.
 5. Basic concept of blockchain technology.
 6. Writing, compiling, and deploying to any blockchain (EVM or non-EVM compatible blockchain).
-7. Understand concepts of ABIs, Faucets, and wallet connect.
+7. Understand concepts of [ABIs](https://docs.fuel.network/guides/quickstart/building-a-smart-contract/#abi), Faucets, and wallet connect.
 
 ## Getting Started
 
