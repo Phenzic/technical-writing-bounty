@@ -1000,7 +1000,7 @@ impl Info for Contract {
 Now that you have completed implementing your main contract, let's return to the other contract types you imported earlier. You will complete the next steps by creating those contracts.
 
 ### The Library Contracts
-Three sway contracts can be deployed on Fuel by three main [types](https://docs.fuel.network/docs/sway/sway-program-types/). [`Contracts`](https://docs.fuel.network/docs/sway/sway-program-types/smart_contracts/), [`Libraries`](https://docs.fuel.network/docs/sway/sway-program-types/libraries/), [`Scripts`](https://docs.fuel.network/docs/sway/sway-program-types/scripts/), and [`Predicates`](https://docs.fuel.network/docs/sway/sway-program-types/predicates/).
+Three Sway program [types](https://docs.fuel.network/docs/sway/sway-program-types/) can be deployed on Fuel: [`Contracts`](https://docs.fuel.network/docs/sway/sway-program-types/smart_contracts/), [`Libraries`](https://docs.fuel.network/docs/sway/sway-program-types/libraries/), [`Scripts`](https://docs.fuel.network/docs/sway/sway-program-types/scripts/), and [`Predicates`](https://docs.fuel.network/docs/sway/sway-program-types/predicates/).
 
 You will write the contract libraries you imported earlier in the next few steps.
 
