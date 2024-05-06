@@ -1009,7 +1009,7 @@ Run the commands in your contract directory to create the files for the new libr
 
 ```bash
 $ cd src
-$ mkdir errors.sw data_structires.sw events.sw interface.sw utils.sw
+$ mkdir errors.sw data_structures.sw events.sw interface.sw utils.sw
 ```
 
 ## 2. The Error Library
