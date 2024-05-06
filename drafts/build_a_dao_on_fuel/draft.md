@@ -1384,7 +1384,7 @@ Following the next few steps, you will deploy your contract to the Fuel `beta-4`
 Assuming you already have your developer wallet configured locally and that your wallet details, including your password, are safely stored. If not, follow the steps [here](https://github.com/FuelLabs/forc-wallet) or watch [this](https://www.youtube.com/watch?v=YiNRgaQvoqo).
 
 
-1. First, you need to get your test faucets to deploy and make transactions on your contract. Head over to the site to get your faucets.
+1. First, you need to get your test faucet coins to deploy and make transactions on your contract. Head over to the test faucet to get your tokens.
 
 2. Run the command `forc deploy --testnet`. You should get a response similar to the one below.
 
