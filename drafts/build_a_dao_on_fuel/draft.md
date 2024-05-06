@@ -45,7 +45,7 @@ In the next few steps, you will set up your development environment to begin bui
 
 1. Go to your terminal and run the command `wsl` to start your wsl terminal if you are using a Windows
 
-2. Next, run the commands below to generate your new contract directory and fuel development workspace.
+2. Run the commands below in your terminal to generate your new contract directory and Fuel development workspace. (If you have previously not installed the Fuel toolchain, first run `curl https://install.fuel.network | sh` in your terminal.)
 
 ```bash
 $ mkdir Fuel_Dao
