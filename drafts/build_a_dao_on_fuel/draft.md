@@ -17,7 +17,7 @@ By completing this article, you will learn how to create a Dao contract on the F
 
 ## Prerequisites
 
-To follow this tutorial seamlessly, you must have the following checked out.
+To follow this tutorial seamlessly, you should be familiar with the following:
 
 1. [Installation](https://docs.fuel.network/guides/installation/) of dependencies like `fuel`, `sway` extensions on vscode, `rustc`, `cargo`, `rustup` `cargo-generate`, on your machine.
 2. Node version ^18.18.2 || ^20.0.0.
