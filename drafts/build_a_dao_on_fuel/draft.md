@@ -19,7 +19,7 @@ By completing this article, you will learn how to create a Dao contract on the F
 
 To follow this tutorial seamlessly, you must have the following checked out.
 
-1. [Installation](https://docs.fuel.network/guides/installation/) of dependencies like `fuel`, `sway` extensions on vscode, `rustc`, `cargo`, `rustup` `cargo-generate`, on your pc.
+1. [Installation](https://docs.fuel.network/guides/installation/) of dependencies like `fuel`, `sway` extensions on vscode, `rustc`, `cargo`, `rustup` `cargo-generate`, on your machine.
 2. Node version ^18.18.2 || ^20.0.0.
 3. You should have `wsl` installed if you are using a Windows or Mac PC. You can use the code `wsl --install` to install `wsl`.
 4. Knowledge of FuelVM and other Fuel tools.
